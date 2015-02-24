@@ -59,34 +59,13 @@ end
 
 
 Filesystem.compile = function( sPath, nPath )
-
-    --# Example: Filesystem.compile( "folder", "compiled-game" )
-    
-    --# This
-    --[[
-        folder/main.lua
-        folder/src/lib/player.lua
-        folder/src/lib/draw.lua
-    --]]
-    --# Becomes this
-    --[[
-        compiled-game
-    --]]
-    
-
-    -- Put all files together
-    -- Add something that tricks them that they're in the same folder
-    -- Compile them into bytecode
+    -- just a placeholder for now
 end
 
 
 
 Filesystem.compress = function( path )
-end
-
-
-
-Filesystem.decompress = function( path )
+    -- also a placeholder for now
 end
 
 
