@@ -1,10 +1,10 @@
 # CLove
 A framework designed for easier developement, it's based of Love2D, but for [ComputerCraft](http://www.computercraft.info)
-It also adds some other useful libraries that you can use for developing awesome programs/games or whatever it is you want to create.
+It also adds some other useful classes that you can use for developing awesome programs/games or whatever it is you want to create.
 
-These are the libraries included, they're displayed in the order they're loaded, you can find the mods needed for some libraries below, to make sure they work you need to install those mods( duh! ). You can find out why they're needed in the wiki.
+These are the classes included, they're displayed in the order they're loaded, you can find the mods needed for some libraries below, to make sure they work you need to install those mods( duh! ). You can find out why they're needed in the wiki.
 
-|  Library            | Version |  Status       | Dependencies |
+|  Class              | Version |  Status       | Dependencies |
 |---------------------|---------|---------------|--------------|
 |  CLove.Cryptography | 1.0     |  Working      | None         |
 |  CLove.Network      | ---     | Not completed | None         |
@@ -20,10 +20,10 @@ These are the libraries included, they're displayed in the order they're loaded,
 
 
 # Usage
-To load the Framework you simply use os.loadAPI and use it's function load to load the other libraries
+To load the Framework you simply use os.loadAPI and use it's function load to load the other classes
 ```lua
 os.loadAPI( "CLove" )
-CLove:load( "libraries" )
+CLove:load( "classes" )
 ```
 You can then load all the objects by doing this
 ```lua
