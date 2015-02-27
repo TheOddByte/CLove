@@ -8,7 +8,10 @@
 
 local Graphics = {}
 
-assert( CLove.Colors ~= nil, "Colors library not loaded", 0 )
+local w, h = term.getSize()
+
+assert( CLove.Text   ~= nil, "Text class not loaded", 0 )
+assert( CLove.Colors ~= nil, "Colors class not loaded", 0 )
 
 
 Graphics.setColor = function( color )
@@ -27,10 +30,10 @@ end
 
 
 
-Graphics.write = function( text, x, y, x2, mode, color, background )
+Graphics.write = function( text, x, y, limit, align, color, background )
     assert( type( tostring( text ) ) == "string", "string/number expected, got " .. type( text ), 2 )
-    assert( type( x ) == "number", "numbers expected, got " .. type( x ) .. "," .. type( y ), 2 )
-    assert( mode == nil or type( x2 ) == "number", "number expected, got " .. type( x2 ), 2 )
+    assert( type( x ) == "number" and type( y ) == "number", "numbers expected, got " .. type( x ) .. "," .. type( y ), 2 )
+    assert( align == nil or type( limit ) == "number", "number expected, got " .. type( limit ), 2 )
     
     if color then
         Graphics.setColor( color )
@@ -40,14 +43,42 @@ Graphics.write = function( text, x, y, x2, mode, color, background )
     end
     
     text = tostring( text )
-    if mode then
-        if mode == "center" then
-            term.setCursorPos( math.ceil( (( x+x2)-#text)/2 ), y )
+    if align then
+        assert( type( align ) == "string", "string expected, got " .. type( align ), 2 )
+        assert( align == "center" or align == "right" or align == "left", "Invalid alignment: " .. align, 2 )
+        local width = x + limit - 1
+        if #text <= width then
+            if align == "center" then
+                term.setCursorPos( math.ceil( (( x+limit )-#text)/2 ), y )
+            elseif align == "right" then
+                term.setCursorPos( (limit-#text) + 1, y )
+            elseif align == "left" then
+                term.setCursorPos( x, y )
+            end
+            term.write( text )
+        else
+            local lines = CLove.Text.wrap( text, width )
+            for i = 1, #lines do
+                if (y+i)-1 > h then
+                    repeat
+                        y = y - 1
+                    until (y+i)-1 == h
+                    term.scroll( 1 )
+                end
+                if align == "center" then
+                    term.setCursorPos( math.ceil( (( x+limit )-#lines[i])/2), (y+i)-1 )
+                elseif align == "right" then
+                    term.setCursorPos( (limit - #lines[i]) + 1, (y+i)-1 )
+                elseif align == "left" then
+                    term.setCursorPos( x, (y+i)-1 )
+                end
+                term.write( lines[i] )
+            end
         end
     else
         term.setCursorPos( x, y )
+        term.write( text )
     end
-    term.write( text )
 end
 
 
