@@ -1,18 +1,113 @@
 --[[
     [API] Event
-    @version 1.0, 2015-02-22
+    @version 1.0, 2015-07-04
     @author TheOddByte
 --]]
 
 
-local Event = {}
+local Event = {
+    events = {}
+}
 
 
 
+
+function Event.register( self, name, ... )
+
+    self.events[name] = {
+        ["key"]  = {};
+        ["char"] = {};
+        enabled  = false;
+        isRepeat = isRepeat or false;
+    }
+    
+    local e = {...}
+    for i, v in ipairs( e ) do
+        if type( v ) == "string" then
+            if #v == 1 then
+                self.events[name]["char"][v] = false;
+            end
+            
+        elseif type( v ) == "number" then
+            for key, value in pairs( keys ) do
+                if v == value then
+                    self.events[name]["key"][tostring( v )] = false;
+                    break
+                end
+            end
+        end
+    end
+    
+end
+
+
+
+
+
+local function isReleased( self, event )
+    for e, keys in pairs( self.events[event] ) do
+        for k, v in pairs( keys ) do
+            if v == true then
+                return false
+            end
+        end
+    end
+    return false
+end 
+
+local function isValid( self, event )
+    for e, keys in pairs( self.events[event] ) do
+        for k, v in pairs( keys ) do
+            if v == false then
+                return false
+            end
+        end
+    end
+    return true
+end
+
+
+function Event.handle( self, ... )
+
+    local e, key = {...}
+    if e[1] == "key" or e[1] == "char" or e[1] == "key_up" then
+        key = tostring( e[2] )
+    end
+    
+    if e[1] == "key" or e[1] == "char" then
+        for k, v in pairs( self.events ) do
+            if self.events[k][e[1]][key] ~= nil then
+                self.events[k][e[1]][key] = true
+            end
+        end
+    
+    elseif e[1] == "key_up" then
+        for k, v in pairs( self.events ) do
+            if v[e[1]][key] ~= nil then
+                self.events[k][e[1]][key] = false
+            end
+        end
+    end
+    
+    
+    for k, v in ipairs( self.events ) do
+        if v.enabled then
+            os.queueEvent( k )
+        else
+            if isValid( k ) then
+                self.events[k].enabled = v.isRepeat
+            else
+                self.events[k].enabled = false;
+            end
+        end
+    end
+    
+end
+    
 
 function Event.quit()
-    error( "", 0 )
     CLove.Graphics.clear( "black" )
+    error()
 end
 
 
