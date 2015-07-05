@@ -24,7 +24,7 @@ Colors.isValid = function( color )
                 return true
             end
         else
-            if color == v then
+            if color == value then
                 return true
             end
         end
