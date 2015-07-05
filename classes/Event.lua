@@ -1,5 +1,5 @@
 --[[
-    [API] Event
+    [Class] Event
     @version 1.1, 2015-07-05
     @author TheOddByte
 --]]
